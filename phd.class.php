@@ -62,7 +62,7 @@ class PHD extends PHDTools
 	protected $ram = array(), $table = '', $query = array(0 => false), $regex = array(0 => false), $create = false, $rows = '';
 	protected $order = array(0 => false), $byID = false, $db = '', $rand = false, $list_by = false;
 	protected $read  = array('get','nodeInit','exists','ls'), $write = array('changePassword','put','clear','delete','change','create','bump');
-	protected $version = 'PHD: Hypertext Database v8.2';
+	protected $version = 'PHD: Hypertext Database v8.3';
 	# Magic Methods And Functions
 	public function __construct( $user = '', $pass = '', $nsql_dir = '' ) {
 		if(is_dir($nsql_dir) && is_file("{$nsql_dir}/.owner")) {
