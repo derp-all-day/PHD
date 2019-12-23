@@ -53,7 +53,9 @@ class PHD extends PHDTools
 		'default_type',
 		'remote_enabled',
 		'remote_write',
-		'remote_read'
+		'remote_read',
+		'disallowed',
+		'tables_blacklist'
 	);
 	
 	# query variables
@@ -208,10 +210,7 @@ class PHD extends PHDTools
 	# Internal Functions
 	
 	protected function check_ram( $table ) {
-		if(empty($this->ram[$table])) {
-			return false;
-		}
-		return true;
+		return !empty($this->ram[$table]);
 	}
 	
 	protected function get_by_id_from_ram($table, $id) {
