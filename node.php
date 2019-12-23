@@ -1,11 +1,6 @@
 <?php
 include 'phd.class.php';
 
-if(!empty($GLOBALS['_SERVER']['HTTP_USER_AGENT'])) {
-	header('location: ./');
-	die();
-}
-
 if(key($_GET) === 'validate')
 	die(print('valid'));
 
