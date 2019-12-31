@@ -13,38 +13,38 @@ class PHD extends PHDTools
 	 * 3. create an instance and go from there. :)                                                             *
 	 *                                                                                                         *
 	\* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-	
+
 	# <settings>
-	
+
 	/* Root account can change class settings 'settings()' */
 	protected $root_can_change_settings = true;
-	
+
 	/* Users can view settings 'settings()' */
 	protected $users_can_view_settings = true;
-	
+
 	/* can the function 'setup_db_root()' to create a new NoSQL db root be called */
 	protected $create_new_db_root = true;
-	
+
 	/* The default type when an unsupported or blank type is called */
 	protected $default_type = 'text';
-	
+
 	/* Can remote connections to this node be made */
 	protected $remote_enabled = true;
-	
+
 	/* Remote connections to this node can write to database */
 	protected $remote_write = true;
-	
+
 	/* Remote connections to this node can read from database */
 	protected $remote_read = true;
-	
+
 	/* Disabled functions for remote connections to this node */
 	protected $disallowed = array('delete','setup_db_root', '`', 'changePassword');
-	
+
 	/* an array of tables you wish to block from accessing via remote connections to this node */
 	protected $tables_blacklist = array();
-	
+
 	# </settings>
-	
+
 	# array of settings names
 	protected $settings = array(
 		'root_can_change_settings',
@@ -57,7 +57,7 @@ class PHD extends PHDTools
 		'disallowed',
 		'tables_blacklist'
 	);
-	
+
 	# query variables
 	protected $ram = array(), $table = '', $query = array(0 => false), $regex = array(0 => false), $create = false, $rows = '';
 	protected $order = array(0 => false), $byID = false, $db = '', $rand = false, $list_by = false;
@@ -75,9 +75,9 @@ class PHD extends PHDTools
 			}
 		}
 	}
-	
+
 	# Remote Connection Handling Functions
-	
+
 	protected function filter_function( $line, $functions ) {
 		$line = str_replace(' ', '', $line);
 		$jar = explode('->', $line);
@@ -130,9 +130,9 @@ class PHD extends PHDTools
 		}
 		return array($function, $arg_list);
 	}
-	
+
 	public function nullFunction() { return false; }
-	
+
 	protected function parse_script( $string ) {
 		$in_quotes = array(false, '');
 		$buff = '';
@@ -156,14 +156,14 @@ class PHD extends PHDTools
 		}
 		return $queries;
 	}
-	
+
 	protected function text_to_array( $data ) {
 		# array('lol' => 'string', 'kek' => 'string')
 		#preg_match("~(array\(.*?\))(,|\s|\)|;)~i", $data, $match);
 		#eval("\$data = {$match[1]}");
 		return $data;
 	}
-	
+
 	protected function interpret_functions( $query ) {
 		if($this->filter_function($query, $this->disallowed)) {
 			return NULL;
@@ -206,13 +206,13 @@ class PHD extends PHDTools
 		}
 		return json_encode($ret);
 	}
-	
+
 	# Internal Functions
-	
+
 	protected function check_ram( $table ) {
 		return !empty($this->ram[$table]);
 	}
-	
+
 	protected function get_by_id_from_ram($table, $id) {
 		if(!$this->check_ram($table)) {
 			$this->ram[$this->table] = $this->get_table($this->table);
@@ -224,7 +224,7 @@ class PHD extends PHDTools
 		}
 		return false;
 	}
-	
+
 	protected function get_row_id_from_ram($table, $col, $val) {
 		if(!$this->check_ram($table)) {
 			$this->ram[$this->table] = $this->get_table($this->table);
@@ -236,7 +236,7 @@ class PHD extends PHDTools
 		}
 		return false;
 	}
-	
+
 	protected function get_where_from_ram($table, $col, $val, $limit) {
 		if(!$this->check_ram($table)) {
 			$this->ram[$this->table] = $this->get_table($this->table);
@@ -256,16 +256,16 @@ class PHD extends PHDTools
 		}
 		return false;
 	}
-	
+
 	protected function get_table_from_ram( $table ) {
 		if(!$this->check_ram($table)) {
 			$this->ram[$this->table] = $this->get_table($this->table);
 		}
 		return $this->ram[$table];
 	}
-	
+
 	# Other Internal PHD Functions
-	
+
 	protected function array_orderby() {
 		$args = func_get_args();
 		$data = array_shift($args);
@@ -282,7 +282,7 @@ class PHD extends PHDTools
 		call_user_func_array('array_multisort', $args);
 		return array_pop($args);
 	}
-	
+
 	protected function order_output($out) {
 		if($this->rand) {
 			$num = count($out) - 1;
@@ -309,16 +309,16 @@ class PHD extends PHDTools
 		}
 		return $this->array_orderby($out, $tmp[1], SORT_ASC);
 	}
-	
+
 	# PHD User Functions
-	
+
 	/* DESC: Check if current object is successfully authenticated to an existing local PHD database
 	 * FUNCTION: isAuthenenticated()
 	 */
 	public function isAuthenenticated() {
 		return ($this->auth)?true:false;
 	}
-	
+
 	/* DESC: Select a database
 	 * FUNCTION: database( $database )
 	 * $database: the name of the database to select
@@ -336,7 +336,7 @@ class PHD extends PHDTools
 		}
 		return $this;
 	}
-	
+
 	/* DESC: Select a table or define a new table to be created
 	 * FUNCTION: table( $table, $rows = '' )
 	 * $table: the name of the table to select or to be created
@@ -350,7 +350,7 @@ class PHD extends PHDTools
 		$this->table = $table;
 		return $this;
 	}
-	
+
 	/* DESC: Fetch a row or table
 	 * FUNCTION: get( $flag = false )
 	 * $flag: (optional) a flag to alter the behaviour of the function
@@ -395,7 +395,7 @@ class PHD extends PHDTools
 					if($flag === 'id') {
 						return $key;
 					}
-					$ret[] = $row;
+					$ret[$key] = $row;
 					$this->regex[3]--;
 				}
 				if($this->regex[3] === 0) {
@@ -440,7 +440,7 @@ class PHD extends PHDTools
 		$this->rows  = '';
 		return false;
 	}
-	
+
 	/* DESC: Enter data (new row) into a table. Normaly returns new row id.
 	 * FUNCTION: put( $data = '', $chain = false )
 	 * $data: an associative array of the new row to enter into the table
@@ -464,7 +464,7 @@ class PHD extends PHDTools
 		}
 		return $id;
 	}
-	
+
 	/* DESC: Clear a table or row from a table (Same as 'delete()')
 	 * FUNCTION: clear()
 	 */
@@ -486,7 +486,7 @@ class PHD extends PHDTools
 			return false;
 		}
 	}
-	
+
 	/* DESC: Delete a row, table, or database
 	 * FUNCTION: delete()
 	 */
@@ -512,7 +512,7 @@ class PHD extends PHDTools
 			return false;
 		}
 	}
-	
+
 	/* DESC: Search a table for a row(s) were a column equals a given value
 	 * FUNCTION: find( $val1 = '', $val2 = '', $limit = 1 )
 	 * $val1: Name of the column to look in
@@ -530,7 +530,7 @@ class PHD extends PHDTools
 		$this->byID = false;
 		return $this;
 	}
-	
+
 	/* DESC: Search a table for a row(s) were a column equals a given regular expression
 	 * FUNCTION: regex( $column, $expression, $limit = 1 )
 	 * $column: The column to search
@@ -545,7 +545,7 @@ class PHD extends PHDTools
 		$this->regex = array(true, $column, $expression, $limit);
 		return $this;
 	}
-	
+
 	/* DESC: Update a value in column of a specified row
 	 * FUNCTION: change( $col = '', $val = '' )
 	 * $col: Name of the column to change the value of
@@ -562,7 +562,7 @@ class PHD extends PHDTools
 			return $this->update($this->table, $query[1], $query[2], $col, $val);
 		}
 	}
-	
+
 	/* DESC: Select a row by it's row ID
 	 * FUNCTION: id( $id )
 	 * $id: The row ID of the row to select
@@ -577,7 +577,7 @@ class PHD extends PHDTools
 		$this->byID = $id;
 		return $this;
 	}
-	
+
 	/* DESC: select a random row from a  table
 	 * FUNTION: rand()
 	 */
@@ -585,7 +585,7 @@ class PHD extends PHDTools
 		$this->rand = true;
 		return $this;
 	}
-	
+
 	/* DESC: Check if a table or a database exists
 	 * FUNCTION: exists()
 	 */
@@ -603,10 +603,10 @@ class PHD extends PHDTools
 		}
 		return $this->table_exists($this->table);
 	}
-	
+
 	/* DESC: Create a connection to a remote PHD database (node) and execute a query(s)
 	 * FUNCTION: remote( $query, $user, $pass, $db, $node )
-	 * $query: the phd code to execute without the '$obj->' at the beginning of query string each separated by a semicolon ';' 
+	 * $query: the phd code to execute without the '$obj->' at the beginning of query string each separated by a semicolon ';'
 	 * $user: Username for the remote database to connect to
 	 * $pass: Password for the remote database to connect to
 	 * $db: The name of the remote database to connect to
@@ -617,7 +617,7 @@ class PHD extends PHDTools
 			if(!preg_match('!^(((f|ht)tp(s)?://)[-a-zA-Zа-яА-Я()0-9@:%_+.~#?&;//=]+)$!i', $node)) {
 				throw new Exception('remote(): Node must be a valid url');
 			}
-			$http = curl_init($node); 
+			$http = curl_init($node);
 			curl_setopt($http, CURLOPT_RETURNTRANSFER, 1);
 			$result = curl_exec($http);
 			$http_status = curl_getinfo($http, CURLINFO_HTTP_CODE);
@@ -634,10 +634,10 @@ class PHD extends PHDTools
 			throw new Exception('remote(): User did not set all required parameters');
 		}
 	}
-	
+
 	/* DESC: Used for handling remote connections to this database threw 'node.php'. Returns a json array. Basically 'eval()' for PHD.
 	 * FUNCTION: nodeInit( $query )
-	 * $query: The PHD code to execute without the '$obj->' at the beginning of each line. 
+	 * $query: The PHD code to execute without the '$obj->' at the beginning of each line.
 	 */
 	public function nodeInit( $query ) {
 		$this->isAuth();
@@ -652,7 +652,7 @@ class PHD extends PHDTools
 		}
 		return json_encode($return);
 	}
-	
+
 	/* DESC: Returns an array of set remote privs ('read'=>HasReadPrivs, 'write', HasWritePrivs)
 	 * FUNCTION: checkRemotePrivs()
 	 */
@@ -660,7 +660,7 @@ class PHD extends PHDTools
 		$this->isAuth();
 		return array('read' => $this->remote_read, 'write' => $this->remote_write);
 	}
-	
+
 	/* DESC: Check if remote connections are enabled to be made to the local databases
 	 * FUNCTION: remoteConnectionEnabled()
 	 */
@@ -668,7 +668,7 @@ class PHD extends PHDTools
 		$this->isAuth();
 		return $this->remote_enabled;
 	}
-	
+
 	/* DESC: Return array of current PHD class settings
 	 * FUNCTION: settings()
 	 */
@@ -685,7 +685,7 @@ class PHD extends PHDTools
 			return $array;
 		}
 	}
-	
+
 	/* DESC: Return the next (usable) unused row ID of a given table
 	 * FUNCTION: getNextID()
 	 */
@@ -706,8 +706,8 @@ class PHD extends PHDTools
 		}
 		return $stamp.'s';
 	}
-	
-	/* DESC: Placed before you call 'get()' in the chain. Orders fetched data either ascending or descending by a specific column.  
+
+	/* DESC: Placed before you call 'get()' in the chain. Orders fetched data either ascending or descending by a specific column.
 	 * FUNCTION: order( $column, $order = 'asc' )
 	 * $column: Name of the column to order the fetched rows by.
 	 * $order: How to order the fetched rows ('asc', 'dec'), 'asc' is default
@@ -721,7 +721,7 @@ class PHD extends PHDTools
 		$this->order = array(true, $column, $order);
 		return $this;
 	}
-	
+
 	/* DESC: Move a specified row to the top of the table
 	 * FUNCTION: bump( $flag = false )
 	 * $flag: Alter the functionality of the function
@@ -805,7 +805,7 @@ class PHD extends PHDTools
 		}
 		return $this->storeData("{$this->nsql_dir}/{$this->database}/{$this->table}/table.tb", json_encode($ret));
 	}
-	
+
 	/* DESC: Dump a tables contents into a runable PHD script
 	 * FUNCCTION: dump( $flag = false )
 	 * $flag: Alter the functionality of the function
@@ -854,7 +854,7 @@ class PHD extends PHDTools
 		}
 		return str_replace('INT_ROW_COUNT', $entry, $output_h).$output;
 	}
-	
+
 	/* DESC: List the tables in the current database or the rows and row types of a table, returns an array
 	 * FUNCTION: function schema()
 	 *
@@ -877,14 +877,14 @@ class PHD extends PHDTools
 		}
 		return false;
 	}
-	
+
 	/* DESC: Print out the current version.
 	 * FUNCTION: version()
 	 */
 	public function version() {
 		return $this->version;
 	}
-	
+
 	/* Desc: change a database users password
 	 * Function: change_password($new_password)
 	 * $new_password: new password to set
